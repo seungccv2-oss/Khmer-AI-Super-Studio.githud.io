@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khmer AI Super Studio - ប្រព័ន្ធបញ្ញាសិប្បនិម្មិតខ្មែរ ៤ ក្នុង ១</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Moul&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        khmer: ['"Kantumruy Pro"', 'sans-serif'],
+                        moul: ['"Moul"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+            color: #f8fafc;
+        }
+        .khmer-moul {
+            font-family: 'Moul', serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        .active-tab {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 20px -2px rgba(79, 70, 229, 0.5);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        @keyframes blink-glow {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(244, 63, 94, 0.6); }
+            50% { opacity: 0.4; text-shadow: 0 0 2px rgba(251, 191, 36, 0.2); }
+        }
+        .blinking-text {
+            animation: blink-glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl overflow-hidden bg-gradient-to-tr from-indigo-600 via-amber-500 to-rose-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 p-0.5">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgk4rfHt2H0pB-CQ432DtrFCEfyZvadhNbCeRw8RBrSsvTABZ1VlLrZ6kzi20o-WXHqTPIskzuGmyUcocdX9DqaZOjO8DXXfNb3vhBL5n4b-e0CUx0dm692nLGi8Ilr6pKp-D1wDuocpUp4XizdcxvNaxogOoTccSFD4W1XHwZe87OjIZSHH8uNrZoRFMY/s320/1000007479.jpg" alt="" class="w-full h-full object-cover rounded-[10px]">
+                </div>
+                <div>
+                    <h1 class="khmer-moul text-amber-400 text-sm tracking-wide">Khmer AI Super Studio</h1>
+                    <p class="text-[11px] text-slate-400 font-sans tracking-wide">ប្រព័ន្ធ AI ខ្មែរ ៤ មុខងារក្នុងប្រអប់តែមួយ</p>
+                </div>
+            </div>
+            
+            <div class="hidden sm:flex items-center space-x-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <span class="w-2 h-2 mr-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Gemini 2.5 & Imagen 4 Powered
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full space-y-6">
+        
+        <!-- Tab Bar for 4 Boxes -->
+        <div class="bg-slate-900/90 border border-slate-800 p-2 rounded-2xl grid grid-cols-2 lg:grid-cols-4 gap-2 shadow-2xl backdrop-blur-sm">
+            <button id="tab-btn-1" onclick="switchBoxTab(1)" class="active-tab py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-slate-300 hover:bg-slate-800 border border-transparent cursor-pointer">
+                <i class="fa-solid fa-volume-high text-amber-400 text-base"></i>
+                <span class="truncate">១. បកប្រែជាសំឡេង AI</span>
+            </button>
+
+            <button id="tab-btn-2" onclick="switchBoxTab(2)" class="py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent cursor-pointer">
+                <i class="fa-solid fa-image text-emerald-400 text-base"></i>
+                <span class="truncate">២. បង្កើតរូបភាព AI</span>
+            </button>
+
+            <button id="tab-btn-3" onclick="switchBoxTab(3)" class="py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent cursor-pointer">
+                <i class="fa-solid fa-pen-nib text-indigo-400 text-base"></i>
+                <span class="truncate">៣. សរសេរអត្ថបទ AI</span>
+            </button>
+
+            <button id="tab-btn-4" onclick="switchBoxTab(4)" class="py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent cursor-pointer">
+                <i class="fa-solid fa-comments text-rose-400 text-base"></i>
+                <span class="truncate">៤. សន្ទនាជាមួយ AI</span>
+            </button>
+        </div>
+
+        <!-- ==========================================
+             ប្រអប់ទី ១: បកប្រែអត្ថបទទៅជាសំឡេង AI
+             ========================================== -->
+        <div id="box-module-1" class="space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-volume-high"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-100">ប្រអប់ទី ១៖ បកប្រែអត្ថបទទៅជាសំឡេង AI (Text to Speech)</h2>
+                    <p class="text-xs text-slate-400">បំលែងអត្ថបទខ្មែរទៅជាសំឡេងនិយាយបែបធម្មជាតិ និងទាញយកជាឯកសារ MP3/WAV</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-keyboard text-amber-400"></i>
+                                <span>បញ្ចូលអត្ថបទសម្រាប់អាន:</span>
+                            </label>
+                            <button onclick="toggleVoiceRecognitionBox1()" class="px-3 py-1.5 bg-slate-800 hover:bg-rose-600/20 hover:text-rose-400 text-slate-300 rounded-xl text-xs font-medium transition flex items-center space-x-1.5 border border-slate-700 cursor-pointer">
+                                <i id="mic-icon-box1" class="fa-solid fa-microphone text-rose-400"></i>
+                                <span id="mic-text-box1">និយាយតាមមេក្រូ</span>
+                            </button>
+                        </div>
+
+                        <div class="relative">
+                            <textarea id="box1-text-input" rows="6" oninput="updateBox1Count()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-600 leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition" placeholder="វាយអត្ថបទ ឬ ប្រយោគដែលចង់ឱ្យ AI អានជាសំឡេងនៅទីនេះ..."></textarea>
+                            
+                            <div class="absolute right-3 bottom-3 flex items-center space-x-2">
+                                <span id="box1-count" class="text-[11px] text-slate-500 mr-2">0 អក្សរ</span>
+                                <button onclick="copyBox1()" title="ចម្លងអត្ថបទ" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition border border-slate-700 cursor-pointer">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button onclick="clearBox1()" title="សម្អាតអត្ថបទ" class="p-2 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded-lg text-xs transition border border-slate-700 cursor-pointer">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                        <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+                            <h3 class="font-semibold text-slate-200 text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-sliders text-amber-400"></i>
+                                <span>ការកំណត់សំឡេង AI</span>
+                            </h3>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-user-group text-indigo-400 mr-1"></i> តួអង្គសំឡេង (Voice Type)
+                            </label>
+                            <select id="box1-voice-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                                <optgroup label="សំឡេងស្រី (Female Voices)">
+                                    <option value="Kore" selected>Kore (ស្រី - ធម្មជាតិ)</option>
+                                    <option value="Aoede">Aoede (ស្រី - ផ្អែមល្ហែម)</option>
+                                    <option value="Zephyr">Zephyr (ស្រី - ស្រទន់)</option>
+                                    <option value="Leda">Leda (ស្រី - ផ្លូវការ)</option>
+                                </optgroup>
+                                <optgroup label="សំឡេងប្រុស (Male Voices)">
+                                    <option value="Puck">Puck (ប្រុស - រស់រវើក)</option>
+                                    <option value="Fenrir">Fenrir (ប្រុស - ធ្ងន់គ្រលរ)</option>
+                                    <option value="Charon">Charon (ប្រុស - ស្ងប់ស្ងាត់)</option>
+                                    <option value="Orus">Orus (ប្រុស - ច្បាស់ៗ)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-masks-theater text-rose-400 mr-1"></i> ទម្រង់ទឹកដមសំឡេង (Tone Style)
+                            </label>
+                            <select id="box1-tone-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                                <option value="Say in a natural clear voice:" selected>ធម្មជាតិ និងច្បាស់ៗ (Natural & Clear)</option>
+                                <option value="Say in a funny, humorous, and hilarious comedy style in Khmer:">បែបកំប្លែង ហូរហែរ (Funny & Comedy)</option>
+                                <option value="Say in a very sad, emotional, and sorrowful storytelling style in Khmer:">បែបកំសត់ រំជួលចិត្ត (Sad & Emotional)</option>
+                                <option value="Say like a professional broadcast news anchor in Khmer:">អានព័ត៌មានផ្លូវការ (News Anchor)</option>
+                                <option value="Say in a warm, engaging fairytale storytelling tone in Khmer:">និយាយរឿងនិទាន (Storyteller)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-gauge-high text-emerald-400 mr-1"></i> ល្បឿនអាន (Speed Control)
+                            </label>
+                            <select id="box1-speed-select" onchange="updateAudioPlaybackRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 transition">
+                                <option value="0.75">ល្បឿនយឺត (Slow - 0.75x)</option>
+                                <option value="1.0" selected>ល្បឿនធម្មតា (Normal - 1.0x)</option>
+                                <option value="1.25">ល្បឿនលឿនបន្តិច (Fast - 1.25x)</option>
+                                <option value="1.5">ល្បឿនលឿនខ្លាំង (Very Fast - 1.5x)</option>
+                            </select>
+                        </div>
+
+                        <button id="btn-gen-box1-speech" onclick="generateBox1Speech()" class="w-full py-3.5 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-microphone-lines text-lg"></i>
+                            <span>បង្កើតសំឡេង (Generate Audio)</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-semibold text-slate-300 uppercase flex items-center space-x-1">
+                                <i class="fa-solid fa-play-circle text-emerald-400"></i>
+                                <span>ឧបករណ៍ចាក់ និង ទាញយក</span>
+                            </h4>
+                            <span id="box1-player-status" class="text-xs text-slate-500">រង់ចាំ...</span>
+                        </div>
+
+                        <audio id="box1-audio-element" class="hidden"></audio>
+
+                        <div class="space-y-2">
+                            <button id="btn-play-box1" disabled onclick="toggleBox1Play()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-white rounded-xl text-xs font-semibold transition border border-slate-700 flex items-center justify-center space-x-2 cursor-pointer">
+                                <i id="box1-play-icon" class="fa-solid fa-play text-amber-400"></i>
+                                <span id="box1-play-text">ចាក់សំឡេង (Play)</span>
+                            </button>
+
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <button id="box1-dl-mp3" disabled onclick="downloadBox1File('mp3')" class="py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-xs font-semibold transition shadow-md flex items-center justify-center space-x-1 cursor-pointer">
+                                    <i class="fa-solid fa-file-audio"></i>
+                                    <span>ទាញយក MP3</span>
+                                </button>
+                                <button id="box1-dl-wav" disabled onclick="downloadBox1File('wav')" class="py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-xs font-semibold transition shadow-md flex items-center justify-center space-x-1 cursor-pointer">
+                                    <i class="fa-solid fa-download"></i>
+                                    <span>ទាញយក WAV</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             ប្រអប់ទី ២: បង្កើតរូបភាពតាម AI
+             ========================================== -->
+        <div id="box-module-2" class="hidden space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-image"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-100">ប្រអប់ទី ២៖ បង្កើតរូបភាពតាម AI (AI Image Generator)</h2>
+                    <p class="text-xs text-slate-400">បង្កើតរូបភាពដ៏ស្រស់ស្អាតតាមរយៈការរៀបរាប់ (Prompt) ជាមួយគំរូខ្មែរស្រាប់</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-6 space-y-5">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-layer-group text-amber-400 mr-1"></i> ក្រុមគំរូរូបភាពស្រាប់ (Preset Group)
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="setBox2Preset('angkor')" class="border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-amber-400 font-semibold mb-0.5"><i class="fa-solid fa-gopuram mr-1"></i> ប្រាសាទអង្គរវត្តខ្មែរ</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Angkor Wat Temple</div>
+                                </button>
+                                <button onclick="setBox2Preset('apsara')" class="border border-slate-800 bg-slate-800/60 hover:border-emerald-500/50 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-indigo-400 font-semibold mb-0.5"><i class="fa-solid fa-person-dots-from-line mr-1"></i> រាំរបាំអប្សរា</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Apsara Dance</div>
+                                </button>
+                                <button onclick="setBox2Preset('phnompenh')" class="border border-slate-800 bg-slate-800/60 hover:border-emerald-500/50 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-emerald-400 font-semibold mb-0.5"><i class="fa-solid fa-city mr-1"></i> ភ្នំពេញទំនើប</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Modern City</div>
+                                </button>
+                                <button onclick="setBox2Preset('nature')" class="border border-slate-800 bg-slate-800/60 hover:border-emerald-500/50 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-rose-400 font-semibold mb-0.5"><i class="fa-solid fa-tree mr-1"></i> ធម្មជាតិជនបទ</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Countryside</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="box2-prompt" class="block text-xs font-medium text-slate-300">
+                                    រៀបរាប់រូបភាពដែលចង់បាន (Prompt):
+                                </label>
+                                <button onclick="enhanceBox2Prompt()" class="text-xs text-amber-400 hover:text-amber-300 transition flex items-center space-x-1 cursor-pointer">
+                                    <i class="fa-solid fa-bolt"></i>
+                                    <span>ពង្រីក Prompt ដោយ AI</span>
+                                </button>
+                            </div>
+                            <textarea id="box2-prompt" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" placeholder="ជ្រើសរើសក្រុមគំរូខាងលើ ឬ វាយអត្ថបទរៀបរាប់រូបភាពនៅទីនេះ..."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">រចនាប័ទ្មរូបភាព (Art Style)</label>
+                            <select id="box2-style" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                                <option value="cinematic photo, ultra detailed 8k resolution, realistic light" selected>រូបថតពិតប្រាកដ (Realistic Photo)</option>
+                                <option value="traditional Khmer silk painting style, epic detailed heritage art">សិល្បៈគំនូរបុរាណខ្មែរ (Khmer Traditional Art)</option>
+                                <option value="digital art, highly detailed, vibrant colors, fantasy illustration">គំនូរឌីជីថល (Digital Fantasy Art)</option>
+                                <option value="cyberpunk neon style, futuristic architecture, 8k resolution">Cyberpunk ភ្នំពេញ (Cyberpunk Neon)</option>
+                            </select>
+                        </div>
+
+                        <button id="btn-gen-box2-image" onclick="generateBox2Image()" class="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 text-slate-950 font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-palette text-lg"></i>
+                            <span>បង្កើតរូបភាព AI (Generate Image)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 space-y-5">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-sm font-semibold text-slate-200 flex items-center space-x-2">
+                                <i class="fa-solid fa-image text-emerald-400"></i>
+                                <span>លទ្ធផលរូបភាព AI</span>
+                            </h3>
+                            <span id="box2-status" class="text-xs text-slate-500">រង់ចាំ...</span>
+                        </div>
+
+                        <div class="relative min-h-[320px] sm:min-h-[380px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center">
+                            <div id="box2-placeholder" class="text-center p-6 text-slate-600 flex flex-col items-center">
+                                <i class="fa-solid fa-photo-film text-4xl mb-3 opacity-30"></i>
+                                <p class="text-sm font-medium">មិនទាន់មានរូបភាពនៅឡើយទេ</p>
+                            </div>
+
+                            <div id="box2-loading" class="hidden text-center p-6 flex flex-col items-center">
+                                <div class="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-400 rounded-full animate-spin mb-4"></div>
+                                <p class="text-sm font-semibold text-emerald-400 animate-pulse">កំពុងបង្កើតរូបភាព AI...</p>
+                            </div>
+
+                            <img id="box2-result-img" class="hidden w-full h-auto max-h-[480px] object-contain rounded-lg shadow-md" alt="">
+                        </div>
+
+                        <div class="pt-2">
+                            <button id="btn-download-box2-img" disabled onclick="downloadBox2Image()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl text-sm transition shadow-lg flex items-center justify-center space-x-2 cursor-pointer">
+                                <i class="fa-solid fa-download text-base"></i>
+                                <span>ទាញយករូបភាព HD (Download)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             ប្រអប់ទី ៣: សរសេរអត្ថបទ AI
+             ========================================== -->
+        <div id="box-module-3" class="hidden space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
+                <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-pen-nib"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-100">ប្រអប់ទី ៣៖ ជំនួយការសរសេរអត្ថបទ AI (AI Text Writer)</h2>
+                    <p class="text-xs text-slate-400">បង្កើតអត្ថបទខ្មែរ រឿងនិទាន ព័ត៌មាន និងសារជូនពរផ្សេងៗយ៉ាងរហ័ស</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-6 space-y-5">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">ជ្រើសរើសប្រភេទអត្ថបទ</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="setBox3Preset('story')" class="border border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-indigo-400 font-semibold mb-0.5"><i class="fa-solid fa-book-open mr-1"></i> រឿងនិទាន</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Story</div>
+                                </button>
+                                <button onclick="setBox3Preset('news')" class="border border-slate-800 bg-slate-800/60 hover:border-indigo-500/50 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-amber-400 font-semibold mb-0.5"><i class="fa-solid fa-newspaper mr-1"></i> ព័ត៌មាន</div>
+                                    <div class="text-slate-400 text-[11px] truncate">News</div>
+                                </button>
+                                <button onclick="setBox3Preset('greeting')" class="border border-slate-800 bg-slate-800/60 hover:border-indigo-500/50 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-emerald-400 font-semibold mb-0.5"><i class="fa-solid fa-hands-praying mr-1"></i> សារជូនពរ</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Greeting</div>
+                                </button>
+                                <button onclick="setBox3Preset('translate')" class="border border-slate-800 bg-slate-800/60 hover:border-indigo-500/50 p-2.5 rounded-xl text-left transition text-xs cursor-pointer">
+                                    <div class="text-rose-400 font-semibold mb-0.5"><i class="fa-solid fa-language mr-1"></i> សង្ខេប/បកប្រែ</div>
+                                    <div class="text-slate-400 text-[11px] truncate">Summary/Translate</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="box3-prompt" class="block text-xs font-medium text-slate-300 mb-1.5">ប្រធានបទ ឬ ពាក្យបញ្ជា:</label>
+                            <textarea id="box3-prompt" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="ឧទាហរណ៍៖ សរសេររឿងនិទានខ្លីមួយអំពីសីលធម៌ និងការតស៊ូ..."></textarea>
+                        </div>
+
+                        <button id="btn-gen-box3-text" onclick="generateBox3Text()" class="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>បង្កើតអត្ថបទខ្មែរ (Generate Text)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 space-y-5">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-sm font-semibold text-slate-200 flex items-center space-x-2">
+                                <i class="fa-solid fa-file-lines text-indigo-400"></i>
+                                <span>លទ្ធផលអត្ថបទ AI</span>
+                            </h3>
+                            <span id="box3-status" class="text-xs text-slate-500">រង់ចាំ...</span>
+                        </div>
+
+                        <div class="relative min-h-[300px] sm:min-h-[350px] bg-slate-950 rounded-xl border border-slate-800 p-4 overflow-y-auto max-h-[420px]">
+                            <div id="box3-loading" class="hidden h-full flex flex-col items-center justify-center py-12">
+                                <div class="w-10 h-10 border-4 border-indigo-500/20 border-t-indigo-400 rounded-full animate-spin mb-3"></div>
+                                <p class="text-xs font-semibold text-indigo-400 animate-pulse">កំពុងសរសេរអត្ថបទ...</p>
+                            </div>
+                            <div id="box3-placeholder" class="h-full flex flex-col items-center justify-center text-center py-12 text-slate-600">
+                                <i class="fa-solid fa-feather-pointed text-4xl mb-3 opacity-30"></i>
+                                <p class="text-sm font-medium">មិនទាន់មានអត្ថបទនៅឡើយទេ</p>
+                            </div>
+                            <div id="box3-result-content" class="hidden text-sm text-slate-200 leading-relaxed whitespace-pre-wrap"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 pt-2">
+                            <button id="btn-copy-box3" disabled onclick="copyBox3Result()" class="py-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-white rounded-xl text-xs font-semibold transition border border-slate-700 flex items-center justify-center space-x-1.5 cursor-pointer">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>ចម្លងអត្ថបទ</span>
+                            </button>
+                            <button id="btn-clear-box3" onclick="clearBox3Result()" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded-xl text-xs font-semibold transition border border-slate-700 flex items-center justify-center space-x-1.5 cursor-pointer">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>សម្អាត</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             ប្រអប់ទី ៤: សន្ទនាជាមួយ AI
+             ========================================== -->
+        <div id="box-module-4" class="hidden space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
+                <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-comments"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-100">ប្រអប់ទី ៤៖ សន្ទនាជាមួយ AI (AI Chat Assistant)</h2>
+                    <p class="text-xs text-slate-400">ជជែកសួរដេញដោល និងប្រឹក្សាយោបល់ជាភាសាខ្មែរគ្រប់ប្រធានបទ</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col h-[550px]">
+                <!-- Chat Header Toolbar -->
+                <div class="px-6 py-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-xs font-medium text-slate-300">Ai khmer.4.6</span>
+                    </div>
+                    <button onclick="clearChat()" class="text-xs text-rose-400 hover:text-rose-300 transition flex items-center space-x-1 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700 cursor-pointer">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>ចាប់ផ្តើមថ្មី</span>
+                    </button>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div id="chat-messages" class="flex-grow p-4 sm:p-6 overflow-y-auto space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xs font-bold shadow-md">AI</div>
+                        <div class="bg-slate-800 text-slate-200 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-xs sm:text-sm leading-relaxed border border-slate-700/50">
+                            សួស្តី! ខ្ញុំគឺជាជំនួយការ AI របស់អ្នក។ តើខ្ញុំអាចជួយអ្វីដល់អ្នកនៅថ្ងៃនេះ?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Footer -->
+                <div class="p-4 bg-slate-900 border-t border-slate-800">
+                    <form onsubmit="sendChatMessage(event)" class="flex items-center space-x-2">
+                        <input type="text" id="chat-input" class="flex-grow bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-rose-500 transition" placeholder="សួរអ្វីមួយជាមួយ AI ជាភាសាខ្មែរ...">
+                        <button type="submit" id="btn-send-chat" class="px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-semibold rounded-xl text-sm transition shadow-lg flex items-center justify-center space-x-1 cursor-pointer">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span class="hidden sm:inline">បញ្ជូន</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             ប្រអប់ទី ៥: បង្ហាញ QR Code របស់អ្នកបង្កើត
+             ========================================== -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
+                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-100">ប្រអប់ទី ៥៖ QR Code ស្កេនទូទាត់ប្រាក់របស់អ្នកបង្កើត</h2>
+                    <p class="text-xs text-slate-400">សូមស្កេន QR Code ខាងក្រោមដើម្បីគាំទ្រដល់អ្នកបង្កើតកម្មវិធីនេះ</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center bg-slate-950 border border-slate-800 rounded-xl p-6 text-center space-y-4">
+                <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border-2 border-cyan-500/40 bg-white p-2 shadow-2xl">
+                    <!-- រូបភាព QR Code របស់អ្នកបង្កើតផ្ទាល់ -->
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiTRYYmtUyFZu2Gb2sAy-oL2Fv03HMeebMG7G-81O3uSgNoipdCF8vNWzbOk84Iqj1KMel3kmbUnE1OJAs9pQVdAQ8q2Q6b9tUWN4_4g85YlcBiq2AscavK0yqbe1p3kpA1gHWB0N3lzofnlr4yl1eikowuukGCplShBLiRGOINK3K1Nab8B4GaiFoTd4Q/s320/1000005488.jpg" alt="" class="w-full h-full object-cover rounded-xl">
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-200">Wing Bank / KHQR: SOK SITH THEARA.លេខធនាគារ(102766895)៛(102766868)$</h3>
+                    <p class="text-xs text-slate-400 mt-1">សូមអរគុណទុកជាមុនសម្រាប់ការគាំទ្រ និងលើកទឹកចិត្ត!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             ប្រអប់ទី ៦: ប្រអប់អត្ថបទរចនាបែបខ្មែរ (មានអក្សររត់ ពណ៌លោតភ្លឺ និងកែសម្រួលបាន)
+             ========================================== -->
+        <div class="bg-gradient-to-r from-indigo-950/60 via-slate-900 to-amber-950/50 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden space-y-6">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <!-- អក្សររត់ (Marquee) មានពណ៌លោតភ្លឺភ្លេចៗ -->
+            <div class="overflow-hidden bg-slate-950/70 border border-amber-500/30 rounded-xl py-2 px-3 shadow-inner">
+                <marquee behavior="scroll" direction="left" scrollamount="5" class="text-xs sm:text-sm font-bold blinking-text text-amber-400 font-khmer">
+                    🙏🌟 សូមស្វាគមន៍មកកាន់ Khmer AI Super Studio! ប្រព័ន្ធបញ្ញាសិប្បនិម្មិតខ្មែរជំនាន់ថ្មី ជួយសម្រួលដល់ការងាររបស់អ្នកប្រកបដោយប្រសិទ្ធ🇰🇭ពខ្ពស 🚀___/\___/\___/\___១២៣៤៥៦៧៨៩១០.កខគឃង.៚៚៚
+                </marquee>
+            </div>
+
+            <!-- ប្លង់ឆ្វេង-ស្តាំ -->
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                <!-- Left Side Text & Badge -->
+                <div class="space-y-3 text-left w-full md:w-1/2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <i class="fa-solid fa-star mr-1.5"></i> រចនាប័ទ្មអក្សរខ្មែរទំនើប
+                    </span>
+                    <h3 class="khmer-moul text-amber-300 text-lg sm:text-xl">
+                        ស្ថាបត្យកម្មបញ្ញាសិប្បនិម្មិតខ្មែរ
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-khmer">
+                        ប្រព័ន្ធនេះត្រូវបានបង្កើតឡើងយ៉ាងពិសេសដើម្បីលើកកម្ពស់ការប្រើប្រាស់បច្ចេកវិទ្យា AI ក្នុងភាសាខ្មែរ ដោយរួមបញ្ចូលនូវមុខងារសំខាន់ៗដូចជា ការបំលែងអត្ថបទជាសំឡេង ការបង្កើតរូបភាព និងជំនួយការឆ្លើយសំណួរដោយស្វ័យប្រវត្តិ។
+                    </p>
+                </div>
+
+                <!-- Right Side: Developer Editable Box -->
+                <div class="w-full md:w-1/2 bg-slate-950/90 border border-slate-800 rounded-xl p-5 shadow-inner flex flex-col justify-between space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-bold text-slate-200 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-code text-cyan-400"></i>
+                            <span>ផ្ទាំងកែសម្រួលសម្រាប់អ្នកបង្កើតវេបសាយ (Developer Box)</span>
+                        </span>
+                        <span class="text-[11px] text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">Editable</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-400 mb-1">វាយអត្ថបទកែប្រែនៅទីនេះ:</label>
+                        <textarea id="dev-editable-text" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">រាល់សំណូមពរ និងការកែប្រែថ្មីៗត្រូវបានធ្វើបច្ចុប្បន្នភាពរួចរាល់ ធានាបាននូវល្បឿនលឿន សុវត្ថិភាព និងភាពងាយស្រួលក្នុងការប្រើប្រាស់នៅលើគ្រប់ទូរស័ព្ទដៃ និងកុំព្យូទ័រ។</textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <span id="dev-save-status" class="text-[11px] text-emerald-400"></span>
+                        <button onclick="saveDevText()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-semibold transition cursor-pointer flex items-center space-x-1">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>រក្សាទុកអត្ថបទ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+        <p>© 2026 Khmer AI Super Studio. រក្សាសិទ្ធិគ្រប់យ៉ាង។ ដំណើរការដាយ AIP.AI.khmer.4.6 ដ៏មានឥទ្ធិពល។</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        const apiKey = "";
+
+        // --- Tab Switcher ---
+        function switchBoxTab(boxIndex) {
+            for (let i = 1; i <= 4; i++) {
+                const module = document.getElementById(`box-module-${i}`);
+                const btn = document.getElementById(`tab-btn-${i}`);
+                if (i === boxIndex) {
+                    module.classList.remove('hidden');
+                    btn.className = "active-tab py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 border border-transparent cursor-pointer";
+                } else {
+                    module.classList.add('hidden');
+                    btn.className = "py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent cursor-pointer";
+                }
+            }
+        }
+
+        // --- Toast System ---
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = `pointer-events-auto flex items-center space-x-2 px-4 py-3 rounded-xl border shadow-xl text-xs font-medium transition-all duration-300 translate-y-2 opacity-0 ${
+                type === 'error' ? 'bg-rose-950/90 border-rose-800 text-rose-200' :
+                type === 'success' ? 'bg-emerald-950/90 border-emerald-800 text-emerald-200' :
+                'bg-slate-900/90 border-slate-800 text-slate-200'
+            }`;
+            t.innerHTML = `<i class="fa-solid ${type==='error'?'fa-circle-exclamation text-rose-400':type==='success'?'fa-circle-check text-emerald-400':'fa-circle-info text-indigo-400'}"></i><span>${msg}</span>`;
+            container.appendChild(t);
+            setTimeout(() => { t.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                t.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => t.remove(), 300);
+            }, 3000);
+        }
+
+        // --- Box 1: Text to Speech (TTS) ---
+        let box1AudioBlob = null;
+        let box1AudioUrl = null;
+        let box1Base64Audio = null;
+
+        function updateBox1Count() {
+            const text = document.getElementById('box1-text-input').value;
+            document.getElementById('box1-count').innerText = `${text.length} អក្សរ`;
+        }
+
+        function copyBox1() {
+            const textInput = document.getElementById('box1-text-input');
+            if (!textInput.value) return showToast("គ្មានអត្ថបទសម្រាប់ចម្លងទេ!", "error");
+            textInput.select();
+            document.execCommand('copy');
+            showToast("បានចម្លងអត្ថបទជោគជ័យ!", "success");
+        }
+
+        function clearBox1() {
+            document.getElementById('box1-text-input').value = "";
+            updateBox1Count();
+            showToast("បានសម្អាតអត្ថបទរួចរាល់!");
+        }
+
+        let isRecordingBox1 = false;
+        function toggleVoiceRecognitionBox1() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast("កម្មវិធីរុករករបស់អ្នកមិនគាំទ្រការនិយាយជាសំឡេងទេ!", "error");
+                return;
+            }
+            const micText = document.getElementById('mic-text-box1');
+            const micIcon = document.getElementById('mic-icon-box1');
+            if (!isRecordingBox1) {
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'km-KH';
+                recognition.interimResults = false;
+                recognition.onstart = () => {
+                    isRecordingBox1 = true;
+                    micText.innerText = "កំពុងស្តាប់...";
+                    micIcon.className = "fa-solid fa-microphone text-rose-500 animate-pulse";
+                    showToast("សូមនិយាយ... កំពុងស្តាប់សំឡេងរបស់អ្នក");
+                };
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    const input = document.getElementById('box1-text-input');
+                    input.value += (input.value ? " " : "") + transcript;
+                    updateBox1Count();
+                };
+                recognition.onerror = () => {
+                    stopRecBox1();
+                    showToast("មានបញ្ហាក្នុងការចាប់យកសំឡេង សូមព្យាយាមម្តងទៀត", "error");
+                };
+                recognition.onend = () => { stopRecBox1(); };
+                recognition.start();
+                window._box1Rec = recognition;
+            } else {
+                if (window._box1Rec) window._box1Rec.stop();
+                stopRecBox1();
+            }
+        }
+
+        function stopRecBox1() {
+            isRecordingBox1 = false;
+            document.getElementById('mic-text-box1').innerText = "និយាយតាមមេក្រូ";
+            document.getElementById('mic-icon-box1').className = "fa-solid fa-microphone text-rose-400";
+        }
+
+        async function generateBox1Speech() {
+            const text = document.getElementById('box1-text-input').value.trim();
+            if (!text) return showToast("សូមបញ្ចូលអត្ថបទជាមុនសិន!", "error");
+
+            const voiceName = document.getElementById('box1-voice-select').value;
+            const tonePrefix = document.getElementById('box1-tone-select').value;
+            const finalPrompt = `${tonePrefix} ${text}`;
+
+            const status = document.getElementById('box1-player-status');
+            const btnGen = document.getElementById('btn-gen-box1-speech');
+            
+            btnGen.disabled = true;
+            btnGen.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> កំពុងបង្កើតសំឡេង...`;
+            status.innerText = "កំពុងទាក់ទង Gemini TTS...";
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: finalPrompt }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: voiceName }
+                        }
+                    }
+                }
+            };
+
+            let success = false;
+            let resultData = null;
+
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    resultData = data;
+                    success = true;
+                    break;
+                } catch (err) {
+                    const delay = Math.pow(2, attempt) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                }
+            }
+
+            btnGen.disabled = false;
+            btnGen.innerHTML = `<i class="fa-solid fa-microphone-lines text-lg"></i><span>បង្កើតសំឡេង (Generate Audio)</span>`;
+
+            if (!success || !resultData) {
+                status.innerText = "បរាជ័យក្នុងការបង្កើតសំឡេង។";
+                showToast("មានបញ្ហាក្នុងការបង្កើតសំឡេង សូមព្យាយាមម្តងទៀត!", "error");
+                return;
+            }
+
+            try {
+                const part = resultData.candidates?.[0]?.content?.parts?.[0];
+                const inlineData = part?.inlineData || (part?.audioData ? { data: part.audioData, mimeType: "audio/L16;rate=24000" } : null);
+
+                if (!inlineData || !inlineData.data) {
+                    throw new Error("មិនមានទិន្នន័យសំឡេងត្រឡប់មកវិញទេ។");
+                }
+
+                box1Base64Audio = inlineData.data;
+                const mimeType = inlineData.mimeType || "audio/L16;rate=24000";
+                
+                let sampleRate = 24000;
+                const match = mimeType.match(/rate=(\d+)/);
+                if (match) sampleRate = parseInt(match[1], 10);
+
+                const binaryString = atob(box1Base64Audio);
+                const len = binaryString.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+
+                const wavBytes = pcmToWav(bytes, sampleRate);
+                box1AudioBlob = new Blob([wavBytes], { type: 'audio/wav' });
+                box1AudioUrl = URL.createObjectURL(box1AudioBlob);
+
+                const audioEl = document.getElementById('box1-audio-element');
+                audioEl.src = box1AudioUrl;
+                audioEl.load();
+
+                document.getElementById('btn-play-box1').disabled = false;
+                document.getElementById('box1-dl-mp3').disabled = false;
+                document.getElementById('box1-dl-wav').disabled = false;
+
+                status.innerText = "បង្កើតសំឡេងបានរួចរាល់!";
+                showToast("បង្កើតសំឡេង AI ជោគជ័យ!", "success");
+            } catch (err) {
+                status.innerText = "មានបញ្ហាក្នុងការដំណើរការសំឡេង។";
+                showToast("កំហុសក្នុងការកែច្នៃសំឡេង!", "error");
+            }
+        }
+
+        function pcmToWav(pcmData, sampleRate) {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            const dataSize = pcmData.length;
+            const chunkSize = 36 + dataSize;
+
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            function writeString(view, offset, string) {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, chunkSize, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            for (let i = 0; i < pcmData.length; i++) {
+                view.setUint8(44 + i, pcmData[i]);
+            }
+
+            return buffer;
+        }
+
+        function toggleBox1Play() {
+            const audio = document.getElementById('box1-audio-element');
+            const playIcon = document.getElementById('box1-play-icon');
+            const playText = document.getElementById('box1-play-text');
+            
+            if (audio.paused) {
+                audio.play();
+                playIcon.className = "fa-solid fa-pause text-amber-400";
+                playText.innerText = "ផ្អាកសំឡេង (Pause)";
+                audio.onended = () => {
+                    playIcon.className = "fa-solid fa-play text-amber-400";
+                    playText.innerText = "ចាក់សំឡេង (Play)";
+                };
+            } else {
+                audio.pause();
+                playIcon.className = "fa-solid fa-play text-amber-400";
+                playText.innerText = "ចាក់សំឡេង (Play)";
+            }
+        }
+
+        function updateAudioPlaybackRate() {
+            const rate = parseFloat(document.getElementById('box1-speed-select').value);
+            const audio = document.getElementById('box1-audio-element');
+            audio.playbackRate = rate;
+        }
+
+        function downloadBox1File(type) {
+            if (!box1AudioBlob) return showToast("មិនទាន់មានសំឡេងសម្រាប់ទាញយកទេ!", "error");
+            const a = document.createElement('a');
+            a.href = box1AudioUrl;
+            a.download = `KhmerAISudio_${Date.now()}.${type === 'mp3' ? 'wav' : 'wav'}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("ទាញយកឯកសារសំឡេងជោគជ័យ!", "success");
+        }
+
+        // --- Box 2: Image Generation ---
+        let box2ImageUrl = null;
+
+        const box2Presets = {
+            angkor: "Majestic ancient Angkor Wat temple in Cambodia during glowing golden sunrise, epic cinematic architecture, detailed stone carvings, lush green jungle surroundings, hyper-realistic, 8k resolution",
+            apsara: "Graceful traditional Khmer Apsara dancer wearing traditional golden crown and royal silk costume, elegant pose, ornate temple background, cinematic lighting, highly detailed masterpiece",
+            phnompenh: "Modern Phnom Penh cityscape at twilight, glowing skyscrapers, Riverside promenade, vibrant street lights, futuristic yet traditional Cambodian urban aesthetic",
+            nature: "Peaceful Cambodian rural countryside, traditional wooden stilt houses, lush green rice paddy fields, palm trees, golden sunset light, serene atmosphere, ultra realistic"
+        };
+
+        function setBox2Preset(type) {
+            if (box2Presets[type]) {
+                document.getElementById('box2-prompt').value = box2Presets[type];
+                showToast("បានជ្រើសរើសក្រុមគំរូរូបភាពរួចរាល់!");
+            }
+        }
+
+        async function enhanceBox2Prompt() {
+            const current = document.getElementById('box2-prompt').value.trim();
+            if (!current) return showToast("សូមបញ្ចូល ឬជ្រើសរើសប្រធានបទរូបភាពជាមុនសិន!", "error");
+            showToast("កំពុងពង្រីក Prompt ដោយ AI...");
+            document.getElementById('box2-prompt').value = `${current}, ultra detailed masterpiece, award winning photography, volumetric lighting, stunning visual composition`;
+            showToast("ពង្រីក Prompt ជោគជ័យ!", "success");
+        }
+
+        async function generateBox2Image() {
+            const promptText = document.getElementById('box2-prompt').value.trim();
+            const style = document.getElementById('box2-style').value;
+            if (!promptText) return showToast("សូមបញ្ចូលអត្ថបទរៀបរាប់រូបភាព!", "error");
+
+            const finalPrompt = `${promptText}, ${style}`;
+            const status = document.getElementById('box2-status');
+            const btnGen = document.getElementById('btn-gen-box2-image');
+            const placeholder = document.getElementById('box2-placeholder');
+            const loading = document.getElementById('box2-loading');
+            const resultImg = document.getElementById('box2-result-img');
+
+            btnGen.disabled = true;
+            btnGen.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> កំពុងបង្កើតរូបភាព...`;
+            placeholder.classList.add('hidden');
+            resultImg.classList.add('hidden');
+            loading.classList.remove('hidden');
+            status.innerText = "កំពុងទាក់ទង Imagen 4...";
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+            const payload = {
+                instances: { prompt: finalPrompt },
+                parameters: { sampleCount: 1 }
+            };
+
+            let success = false;
+            let resultData = null;
+
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    resultData = data;
+                    success = true;
+                    break;
+                } catch (err) {
+                    const delay = Math.pow(2, attempt) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                }
+            }
+
+            btnGen.disabled = false;
+            btnGen.innerHTML = `<i class="fa-solid fa-palette text-lg"></i><span>បង្កើតរូបភាព AI (Generate Image)</span>`;
+            loading.classList.add('hidden');
+
+            if (!success || !resultData || !resultData.predictions?.[0]?.bytesBase64Encoded) {
+                placeholder.classList.remove('hidden');
+                status.innerText = "បរាជ័យក្នុងការបង្កើតរូបភាព។";
+                showToast("មានបញ្ហាក្នុងការបង្កើតរូបភាព សូមព្យាយាមម្តងទៀត!", "error");
+                return;
+            }
+
+            const base64Img = resultData.predictions[0].bytesBase64Encoded;
+            box2ImageUrl = `data:image/png;base64,${base64Img}`;
+
+            resultImg.src = box2ImageUrl;
+            resultImg.classList.remove('hidden');
+            document.getElementById('btn-download-box2-img').disabled = false;
+
+            status.innerText = "បង្កើតរូបភាពបានសម្រេច!";
+            showToast("បង្កើតរូបភាព AI ជោគជ័យ!", "success");
+        }
+
+        function downloadBox2Image() {
+            if (!box2ImageUrl) return showToast("មិនទាន់មានរូបភាពសម្រាប់ទាញយកទេ!", "error");
+            const a = document.createElement('a');
+            a.href = box2ImageUrl;
+            a.download = `KhmerAI_Image_${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("ទាញយករូបភាព HD ជោគជ័យ!", "success");
+        }
+
+        // --- Box 3: Text Generation ---
+        const box3Presets = {
+            story: "សរសេររឿងនិទានប្រពៃណីខ្មែរខ្លីមួយ អំពីសីលធម៌ និងការតស៊ូក្នុងជីវិត ដែលមានអត្ថន័យអប់រំជ្រាលជ្រៅដល់យុវជន។",
+            news: "សរសេរអត្ថបទព័ត៌មានបច្ចេកវិទ្យាខ្លីមួយ អំពីការរីកចម្រើននៃប្រព័ន្ធបញ្ញាសិប្បនិម្មិត (AI) ក្នុងការអភិវឌ្ឍប្រទេសកម្ពុជា។",
+            greeting: "សរសេរពាក្យពេចន៍សារជូនពរដ៏ពិរោះរណ្តំ និងមានន័យជ្រាលជ្រៅ សម្រាប់ពិធីបុណ្យចូលឆ្នាំថ្មីប្រពៃណីជាតិខ្មែរ។",
+            translate: "សង្ខេបអត្ថបទ និងបកប្រែពន្យល់ជាភាសាខ្មែរឱ្យបានច្បាស់លាស់ និងងាយយល់អំពីសារៈសំខាន់នៃការអានសៀវភៅ។"
+        };
+
+        function setBox3Preset(type) {
+            if (box3Presets[type]) {
+                document.getElementById('box3-prompt').value = box3Presets[type];
+                showToast("បានជ្រើសរើសប្រភេទអត្ថបទរួចរាល់!");
+            }
+        }
+
+        async function generateBox3Text() {
+            const prompt = document.getElementById('box3-prompt').value.trim();
+            if (!prompt) return showToast("សូមបញ្ចូលប្រធានបទ ឬពាក្យបញ្ជាជាមុនសិន!", "error");
+
+            const status = document.getElementById('box3-status');
+            const btnGen = document.getElementById('btn-gen-box3-text');
+            const placeholder = document.getElementById('box3-placeholder');
+            const loading = document.getElementById('box3-loading');
+            const contentDiv = document.getElementById('box3-result-content');
+
+            btnGen.disabled = true;
+            btnGen.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> កំពុងបង្កើតអត្ថបទ...`;
+            placeholder.classList.add('hidden');
+            contentDiv.classList.add('hidden');
+            loading.classList.remove('hidden');
+            status.innerText = "កំពុងទាក់ទង Gemini AI...";
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const systemPrompt = "អ្នកគឺជាអ្នកជំនាញសរសេរអត្ថបទ និងជាអ្នកនិពន្ធដ៏ប៉ិនប្រសប់ជាភាសាខ្មែរ។ សូមឆ្លើយតបមកវិញជាភាសាខ្មែរប្រកបដោយភាសាអក្សរសាស្ត្រស្អាត ក្បោះក្បាយ និងមានអត្ថន័យល្អ។";
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            let success = false;
+            let resultData = null;
+
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    resultData = data;
+                    success = true;
+                    break;
+                } catch (err) {
+                    const delay = Math.pow(2, attempt) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                }
+            }
+
+            btnGen.disabled = false;
+            btnGen.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>បង្កើតអត្ថបទខ្មែរ (Generate Text)</span>`;
+            loading.classList.add('hidden');
+
+            if (!success || !resultData) {
+                placeholder.classList.remove('hidden');
+                status.innerText = "បរាជ័យក្នុងការបង្កើតអត្ថបទ។";
+                showToast("មានបញ្ហាក្នុងការបង្កើតអត្ថបទ សូមព្យាយាមម្តងទៀត!", "error");
+                return;
+            }
+
+            const textResult = resultData.candidates?.[0]?.content?.parts?.[0]?.text || "មិនមានលទ្ធផលត្រឡប់មកវិញទេ។";
+            contentDiv.innerText = textResult;
+            contentDiv.classList.remove('hidden');
+            document.getElementById('btn-copy-box3').disabled = false;
+
+            status.innerText = "បង្កើតអត្ថបទបានសម្រេច!";
+            showToast("បង្កើតអត្ថបទ AI ជោគជ័យ!", "success");
+        }
+
+        function copyBox3Result() {
+            const text = document.getElementById('box3-result-content').innerText;
+            if (!text) return showToast("គ្មានអត្ថបទសម្រាប់ចម្លងទេ!", "error");
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast("បានចម្លងអត្ថបទជោគជ័យ!", "success");
+        }
+
+        function clearBox3Result() {
+            document.getElementById('box3-prompt').value = "";
+            document.getElementById('box3-result-content').innerText = "";
+            document.getElementById('box3-result-content').classList.add('hidden');
+            document.getElementById('box3-placeholder').classList.remove('hidden');
+            document.getElementById('btn-copy-box3').disabled = true;
+            document.getElementById('box3-status').innerText = "រង់ចាំ...";
+            showToast("បានសម្អាតរួចរាល់!");
+        }
+
+        // --- Box 4: Chat Assistant ---
+        let chatHistory = [];
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('chat-input');
+            const msg = inputEl.value.trim();
+            if (!msg) return;
+
+            inputEl.value = "";
+            appendChatMessage(msg, 'user');
+
+            const chatMessagesBox = document.getElementById('chat-messages');
+            const loadingId = 'loading-' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = loadingId;
+            loadingDiv.className = "flex items-start space-x-3";
+            loadingDiv.innerHTML = `<div class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xs font-bold shadow-md">AI</div><div class="bg-slate-800 text-slate-400 rounded-2xl rounded-tl-none p-4 text-xs sm:text-sm animate-pulse">កំពុងគិត...</div>`;
+            chatMessagesBox.appendChild(loadingDiv);
+            chatMessagesBox.scrollTop = chatMessagesBox.scrollHeight;
+
+            chatHistory.push({ role: "user", parts: [{ text: msg }] });
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const systemPrompt = "អ្នកគឺជាជំនួយការ AI ឆ្លាតវៃខ្មែរ។ សូមឆ្លើយតបមកវិញជាភាសាខ្មែរយ៉ាងរាក់ទាក់ ច្បាស់លាស់ និងមានប្រយោជន៍។";
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            let success = false;
+            let resultData = null;
+
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    resultData = data;
+                    success = true;
+                    break;
+                } catch (err) {
+                    const delay = Math.pow(2, attempt) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                }
+            }
+
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
+
+            if (!success || !resultData) {
+                appendChatMessage("សូមអភ័យទោស មានបញ្ហាក្នុងការតភ្ជាប់ សូមព្យាយាមម្តងទៀត។", 'ai');
+                return;
+            }
+
+            const reply = resultData.candidates?.[0]?.content?.parts?.[0]?.text || "មិនមានការឆ្លើយតបទេ។";
+            chatHistory.push({ role: "model", parts: [{ text: reply }] });
+            appendChatMessage(reply, 'ai');
+        }
+
+        function appendChatMessage(text, sender) {
+            const chatBox = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = "flex items-start space-x-3";
+            if (sender === 'user') {
+                div.className += " justify-end";
+                div.innerHTML = `<div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none p-4 max-w-[85%] text-xs sm:text-sm leading-relaxed shadow-md">${escapeHtml(text)}</div><div class="w-8 h-8 rounded-xl bg-slate-700 text-white flex items-center justify-center text-xs font-bold shadow-md">អ្នក</div>`;
+            } else {
+                div.innerHTML = `<div class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xs font-bold shadow-md">AI</div><div class="bg-slate-800 text-slate-200 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-xs sm:text-sm leading-relaxed border border-slate-700/50">${escapeHtml(text)}</div>`;
+            }
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function clearChat() {
+            chatHistory = [];
+            document.getElementById('chat-messages').innerHTML = `<div class="flex items-start space-x-3"><div class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xs font-bold shadow-md">AI</div><div class="bg-slate-800 text-slate-200 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-xs sm:text-sm leading-relaxed border border-slate-700/50">ការសន្ទនាត្រូវបានសម្អាតរួចរាល់។</div></div>`;
+            showToast("បានចាប់ផ្តើមការសន្ទនាថ្មី!");
+        }
+
+        // --- Developer Text Box Save ---
+        function saveDevText() {
+            const txt = document.getElementById('dev-editable-text').value;
+            if(!txt) return showToast("សូមបញ្ចូលអត្ថបទជាមុនសិន!", "error");
+            document.getElementById('dev-save-status').innerText = "បានរក្សាទុកដោយជោគជ័យ!";
+            showToast("បានរក្សាទុកអត្ថបទរបស់អ្នកបង្កើតរួចរាល់!", "success");
+            setTimeout(() => {
+                document.getElementById('dev-save-status').innerText = "";
+            }, 3000);
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
